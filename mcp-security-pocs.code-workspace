@@ -1,0 +1,11 @@
+{
+  "folders": [
+    {
+      "path": "."
+    },
+    {
+      "name": "MCP Leak BankTools",
+      "path": "mcp_leak_banktools"
+    }
+  ]
+}

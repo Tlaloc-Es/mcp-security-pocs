@@ -1,0 +1,19 @@
+[project]
+name = "mcp-leak-banktools-poc"
+version = "0.1.0"
+description = "Proof of concept for leaking MCP agent tools via prompt injection in a simulated banking scenario. Demonstrates how agent tool metadata can be exfiltrated using crafted user inputs."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "click>=8.2.1",
+    "langchain>=0.3.27",
+    "langchain-mcp-adapters>=0.1.9",
+    "langchain-ollama>=0.3.8",
+    "langgraph>=0.6.7",
+    "mcp[cli]>=1.14.0",
+]
+
+[tool.poe.tasks]
+mcp = "uv run python -m src.server"
+concept = "uv run python -m src.client concept"
+inject = "uv run python -m src.client inject"
