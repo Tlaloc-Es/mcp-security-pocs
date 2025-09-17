@@ -1,0 +1,22 @@
+[project]
+name = "opa-on-mcp"
+version = "0.1.0"
+description = "PoC MCP proxy with OPA to block tools by policy."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "click>=8.2.1",
+    "fastapi>=0.116.1",
+    "gunicorn>=23.0.0",
+    "langchain>=0.3.27",
+    "langchain-mcp-adapters>=0.1.9",
+    "langchain-ollama>=0.3.8",
+    "langgraph>=0.6.7",
+    "mcp[cli]>=1.14.0",
+    "uvicorn>=0.35.0",
+]
+
+[tool.poe.tasks]
+run = "docker compose up --build"
+question_allowed = "uv run python -m src.client concept"
+question_not_allowed = "uv run python -m src.client inject"

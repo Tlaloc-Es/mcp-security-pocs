@@ -1,0 +1,35 @@
+version: "3.9"
+
+services:
+  opa:
+    image: openpolicyagent/opa:latest
+    command:
+      [
+        "run",
+        "--server",
+        "--log-level",
+        "debug",
+        "--addr",
+        "0.0.0.0:8181",
+        "--watch",
+        "/policies",
+      ]
+    volumes:
+      - ./policies:/policies
+    ports:
+      - "8181:8181"
+  mcp:
+    build:
+      context: .
+      dockerfile: Dockerfile.mcp
+    ports:
+      - "8000:8000"
+  mcp_proxy:
+    build:
+      context: .
+      dockerfile: Dockerfile.mcp_proxy
+    ports:
+      - "8080:8080"
+    depends_on:
+      - opa
+      - mcp
