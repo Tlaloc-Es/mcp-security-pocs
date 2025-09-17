@@ -21,7 +21,8 @@ Here are some of the experiments included in this repo:
 | Name                    | Description                                       | Link                                          |
 | ----------------------- | ------------------------------------------------- | --------------------------------------------- |
 | Prompt Leak Banktools   | Demonstrating potential context leakage scenarios | [View README](./mcp_leak_banktools/README.md) |
-| OPA Tool Blocking Proxy | Restricting MCP tool access using OPA policies    | [View README](./mcp_opa_proxy/README.md)      |
+| OPA Tool Blocking Proxy | Enforcing fine-grained MCP tool access control via OPA policy-driven proxy | [View README](./mcp_opa_proxy/README.md)      |
+| OPA Tool Blocking Proxy | Restricting MCP tool access using OPA policies    | [View README](./mcp_opa/README.md)      |
 
 _(More POCs will be added over time…)_
 
