@@ -1,0 +1,35 @@
+repos:
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+    -   id: check-yaml
+    -   id: check-json
+    -   id: check-toml
+    -   id: end-of-file-fixer
+    -   id: trailing-whitespace
+-   repo: https://github.com/executablebooks/mdformat
+    rev: 0.7.22
+    hooks:
+    -   id: mdformat
+- repo: https://github.com/astral-sh/ruff-pre-commit
+  rev: v0.13.0
+  hooks:
+    - id: ruff
+      args: [ --fix ]
+    - id: ruff-format
+- hooks:
+  - id: commitizen
+  repo: https://github.com/commitizen-tools/commitizen
+  rev: v4.9.1
+
+- repo: https://github.com/iamthefij/docker-pre-commit
+  rev: v3.0.1
+  hooks:
+    - id: docker-compose-check
+
+- repo: https://github.com/pryorda/dockerfilelint-precommit-hooks
+  rev: v0.1.0
+  hooks:
+  - id: dockerfilelint
+
+

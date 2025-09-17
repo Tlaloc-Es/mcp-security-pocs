@@ -1,0 +1,4 @@
+[tool.poe.tasks]
+git_hooks_install = "pre-commit install"
+git_hooks_update = "pre-commit autoupdate"
+git_hooks_run = "pre-commit run --all-files"
