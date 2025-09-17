@@ -18,9 +18,10 @@ All experiments are **educational and safe**, performed in controlled environmen
 
 Here are some of the experiments included in this repo:
 
-| Name                  | Description                                       | Link                                          |
-| --------------------- | ------------------------------------------------- | --------------------------------------------- |
-| Prompt Leak Banktools | Demonstrating potential context leakage scenarios | [View README](./mcp_leak_banktools/README.md) |
+| Name                    | Description                                       | Link                                          |
+| ----------------------- | ------------------------------------------------- | --------------------------------------------- |
+| Prompt Leak Banktools   | Demonstrating potential context leakage scenarios | [View README](./mcp_leak_banktools/README.md) |
+| OPA Tool Blocking Proxy | Restricting MCP tool access using OPA policies    | [View README](./mcp_opa_proxy/README.md)      |
 
 _(More POCs will be added over time…)_
 

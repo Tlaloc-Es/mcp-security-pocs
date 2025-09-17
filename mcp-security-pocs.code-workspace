@@ -6,6 +6,10 @@
     {
       "name": "MCP Leak BankTools",
       "path": "mcp_leak_banktools"
+    },
+    {
+      "name": "MCP OPA Proxy",
+      "path": "mcp_opa_proxy"
     }
   ]
 }
