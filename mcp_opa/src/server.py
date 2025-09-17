@@ -1,13 +1,13 @@
 
-from mcp.server.fastmcp import FastMCP
+import json
 import logging
+import os
 import sqlite3
+
+import httpx
+from mcp.server.fastmcp import FastMCP
 from starlette.requests import Request
 from starlette.responses import JSONResponse
-import os
-import httpx
-import logging
-import json
 
 logging.basicConfig(level=logging.INFO)
 ON_DOCKER = os.getenv("RUNNING_IN_DOCKER", "true").lower() == "true"
@@ -72,7 +72,7 @@ if ON_DOCKER:
 
 
 async def check_policy(name: str):
-    """Consulta a OPA si la acción está permitida"""
+    """Checks with OPA if the action is allowed"""
     payload = {"input": {"name": name}}
     logging.info(f"Consultando OPA con payload: {payload}")
     try:
@@ -82,10 +82,10 @@ async def check_policy(name: str):
             result = response.json()
             return result.get("result", {}).get("allow", False)
     except httpx.RequestError as e:
-        logging.error(f"Error de red al consultar OPA: {e}")
+        logging.error(f"Network error while querying OPA: {e}")
         return False
     except Exception as e:
-        logging.error(f"Error inesperado al consultar OPA: {e}")
+        logging.error(f"Unexpected error while querying OPA: {e}")
         return False
 
 @app.middleware("http")
@@ -99,7 +99,7 @@ async def opa_middleware(request: Request, call_next):
             if body_bytes:
                 body = json.loads(body_bytes)
         except Exception as e:
-            logging.warning(f"No se pudo parsear el body: {e}")
+            logging.warning(f"Could not parse body: {e}")
             body = None
         if body:
             name = body.get("params", {}).get("name")
@@ -108,6 +108,6 @@ async def opa_middleware(request: Request, call_next):
     logging.info(f"OPA policy check for name '{name}': {allowed}")
     if not allowed:
         logging.warning(f"Access denied by OPA for name '{name}'")
-        return JSONResponse(status_code=403, content={"detail": "Acceso denegado por OPA"})
+        return JSONResponse(status_code=403, content={"detail": "Access denied by OPA"})
     return await call_next(request)
 

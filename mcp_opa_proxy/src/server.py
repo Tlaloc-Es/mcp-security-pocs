@@ -1,8 +1,8 @@
 
-from mcp.server.fastmcp import FastMCP
 import logging
 import sqlite3
 
+from mcp.server.fastmcp import FastMCP
 
 logging.basicConfig(level=logging.INFO)
 

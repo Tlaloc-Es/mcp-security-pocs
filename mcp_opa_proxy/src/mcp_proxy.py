@@ -1,10 +1,11 @@
 
-from fastapi import FastAPI, Request, Response
-from fastapi.responses import JSONResponse
-import httpx
+import json
 import logging
 import os
-import json
+
+import httpx
+from fastapi import FastAPI, Request, Response
+from fastapi.responses import JSONResponse
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 
@@ -20,7 +21,7 @@ if ON_DOCKER:
 
 
 async def check_policy(name: str):
-    """Consulta a OPA si la acción está permitida"""
+    """Checks with OPA if the action is allowed"""
     payload = {"input": {"name": name}}
     logging.info(f"Consultando OPA con payload: {payload}")
     try:
@@ -30,10 +31,10 @@ async def check_policy(name: str):
             result = response.json()
             return result.get("result", {}).get("allow", False)
     except httpx.RequestError as e:
-        logging.error(f"Error de red al consultar OPA: {e}")
+        logging.error(f"Network error while querying OPA: {e}")
         return False
     except Exception as e:
-        logging.error(f"Error inesperado al consultar OPA: {e}")
+        logging.error(f"Unexpected error while querying OPA: {e}")
         return False
 
 @app.middleware("http")
@@ -47,7 +48,7 @@ async def opa_middleware(request: Request, call_next):
             if body_bytes:
                 body = json.loads(body_bytes)
         except Exception as e:
-            logging.warning(f"No se pudo parsear el body: {e}")
+            logging.warning(f"Could not parse body: {e}")
             body = None
         if body:
             name = body.get("params", {}).get("name")
@@ -56,7 +57,7 @@ async def opa_middleware(request: Request, call_next):
     logging.info(f"OPA policy check for name '{name}': {allowed}")
     if not allowed:
         logging.warning(f"Access denied by OPA for name '{name}'")
-        return JSONResponse(status_code=403, content={"detail": "Acceso denegado por OPA"})
+        return JSONResponse(status_code=403, content={"detail": "Access denied by OPA"})
     return await call_next(request)
 
 def filter_headers(headers):
@@ -75,7 +76,7 @@ async def proxy_streamable_http(request: Request):
                 logging.info(f"Proxied POST /mcp with status {resp.status_code}")
                 return Response(content=resp.content, status_code=resp.status_code, headers=filter_headers(resp.headers))
         except httpx.RequestError as e:
-            logging.error(f"Error de red al proxy /mcp: {e}")
-            return JSONResponse(status_code=502, content={"detail": "Error de red al contactar MCP"})
+            logging.error(f"Network error while proxying /mcp: {e}")
+            return JSONResponse(status_code=502, content={"detail": "Network error while contacting MCP"})
     else:
         return Response(content="Method Not Allowed", status_code=405)
